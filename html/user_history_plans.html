@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>智邮普创工作室-内部管理平台</title>
+<link href="../static/css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="../static/js/jquery-1.11.0.min.js"></script>
+<!-- Custom Theme files -->
+<link href="../static/css/style.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="../static/css/c.css" rel="stylesheet" type="text/css" media="all"/>
+<!-- Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="zypc,smartxupt" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+
+<script type="text/javascript" src="../static/js/move-top.js"></script>
+<script type="text/javascript" src="../static/js/easing.js"></script>
+	<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".scroll").click(function(event){		
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+				});
+			});
+	</script>
+<!-- //end-smoth-scrolling -->
+</head>
+<body>
+<!--banner start here-->
+<div class="banner-two">
+  <div class="header">
+	<div class="container">
+		 <div class="header-main">
+				<div class="logo">
+					<h2><a href="assess_home.php">绩效考核平台</a></h2>
+				</div>
+				<div class="top-nav">
+					<span class="menu"> <img src="../static/images/icon.png" alt=""/></span>
+				 <nav class="cl-effect-1">
+					<ul class="res"> 
+                        <li><a href="/">主页</a></li>
+						<li><a class="active" href="./assess_home.html">写计划</a></li> 
+						<li><a href="/html/user_history_plans.html">历史计划</a></li>
+						<li><a href="../WEPAPI/user_login_out.php">退出</a></li>
+				   </ul>
+				 </nav>
+					<!-- script-for-menu -->
+						 <script>
+						   $( "span.menu" ).click(function() {
+							 $( "ul.res" ).slideToggle( 300, function() {
+							 // Animation complete.
+							  });
+							 });
+						</script>
+		        <!-- /script-for-menu -->
+				</div>
+			 <div class="clearfix"> </div>
+		 </div>
+	  </div>
+	 </div>
+ </div>
+<!--banner end here-->
+
+
+<table>
+<caption>历史计划</caption>
+
+<colgroup>
+<col id="dataCol" />
+<col id="summaryCol" />
+<col id="titleCol" />
+<col id="judgeCol" />
+<col id="rate" />
+<col id="duration">
+</colgroup>
+
+
+<thead>
+<tr>
+<th id="dataPosHead" scope="col">Data</th>
+<th scope="col">本周小结</th>
+<th scope="col">本周计划标题</th>
+<th scope="col">组长评价</th>
+<th scope="col">标准评级</th>
+<th scope="col">学习总时长/h</th>
+</tr>
+</thead>
+
+<tbody>
+</tbody>
+
+</table>
+<script type="text/javascript">
+
+function callback(data){
+  var tBody = document.getElementsByTagName('tbody')[0];
+  
+  for(var i=0;i < data.data.length;i++){
+  	if(data.data.length == 0){
+  		alert("暂无历史计划");
+  		window.location.pathname="assess_home.html";
+  	}
+    var admin_rate = data.data[i].admin_rate;
+    var admin_rank = data.data[i].admin_rank;
+    var timelong = data.data[i].timelong;
+    if(admin_rate == null){
+      admin_rate = "暂无评价";
+      admin_rank = "暂无评价";
+      timelong = "暂无评价，因此总时长为0";
+    }
+    tBody.innerHTML += '<tr><td>'+ data.data[i].pubdate +'</td><td>'+ data.data[i].last_sum+'</td><td>'+ data.data[i].this_play+'</td><td>'+admin_rate+'</td><td>'+admin_rank+'</td><td>'+timelong+'</td></tr>';
+  }
+  
+}
+!function(callback) { 
+  var request = new XMLHttpRequest();
+  request.open("GET","http://ims.smartxupt.com/WEPAPI/user_history_plans.php" ,true);
+  request.send();
+  request.onreadystatechange = function() {
+    if (request.readyState===4) {
+        if (request.status===200) { 
+          var data = JSON.parse(request.responseText);
+  		    if(data == 1){
+            window.location.pathname="/sign_home.php";
+          }
+          callback(data);
+        } else {
+          alert("发生错误：" + request.status);
+        }
+    } 
+  }
+}(callback);
+</script>
+
+</body>
+</html>
